@@ -1,30 +1,9 @@
-![cf](https://i.imgur.com/7v5ASc8.png) 22: Forms and Props
-======
-
-## Submission Instructions
-  * fork this repository & create a new branch for your work
-  * write all of your code in a directory named `lab-` + `<your name>` **e.g.** `lab-susan`
-  * push to your repository
-  * submit a pull request to this repository
-  * submit a link to your PR in canvas
-  * write a question and observation on canvas
+# Reddit Search App
+Allows user to search posts on Reddit. Built using React.
 
 ## Learning Objectives  
 * students will be able to manage controlled inputs
 * students will learn to pass data from parent components to child components through the use of `props`
-
-## Requirements  
-#### Configuration  
-* `README.md`
-* `.gitignore`
-* `.eslintrc`
-* `.babelrc`
-* `package.json`
-* `webpack.config.js`
-* `src/**`
-  * `src/main.js`
-  * `src/style`
-  * `src/style/main.scss`
 
 #### Feature Tasks
 * create the following components and structure them according to the diagram below:
