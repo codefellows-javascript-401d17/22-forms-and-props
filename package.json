@@ -4,7 +4,8 @@
   "description": "![cf](https://i.imgur.com/7v5ASc8.png) 22: Forms and Props ======",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "watch": "webpack-dev-server --inline --hot"
   },
   "repository": {
     "type": "git",
