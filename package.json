@@ -1,0 +1,20 @@
+{
+  "name": "22-forms-and-props",
+  "version": "1.0.0",
+  "description": "![cf](https://i.imgur.com/7v5ASc8.png) 22: Forms and Props ======",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andyfiveeleven/22-forms-and-props.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andyfiveeleven/22-forms-and-props/issues"
+  },
+  "homepage": "https://github.com/andyfiveeleven/22-forms-and-props#readme"
+}
