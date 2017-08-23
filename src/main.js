@@ -33,6 +33,7 @@ class App extends React.Component {
     );
   }
 }
+
 class SearchForm extends React.Component {
   constructor(props){
     super(props);
@@ -73,7 +74,6 @@ class SearchForm extends React.Component {
       } catch (err) {
         console.error(err);
         this.setState({ failed: true })
-        console.log('1', this.state);
       }
     })
     .catch((err) => {
@@ -82,6 +82,8 @@ class SearchForm extends React.Component {
       });
     });
   }
+
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}  >
