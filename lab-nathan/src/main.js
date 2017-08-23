@@ -37,7 +37,12 @@ class App extends React.Component {
 
   searchReddit(query, subreddit, limit) {
     return new Promise((resolve, reject) => {
-      superagent.get(`https://www.reddit.com/r/${subreddit}.json?limit=${limit}`)
+      superagent.get(`https://www.reddit.com/r/${subreddit}/search.json`)
+      .query({ q: query })
+      .query({ restrict_sr: 'on' })
+      .query({ sort: 'relevance' })
+      .query({ t: 'all' })
+      .query({ limit: limit })
       .then(response => {
         this.setState({ posts: this._getPosts(response.body) });
         this.notifyResultsChanged();
@@ -145,7 +150,7 @@ class SearchForm extends React.Component {
           onChange={this.handleSubredditChange}
           required
         />
-        <label for="resultCount"># of Results:</label>
+        <label for="resultCount">Results:</label>
         <input
           id="resultCount"
           className="searchField"
@@ -158,7 +163,7 @@ class SearchForm extends React.Component {
         />
         <input
           type="submit"
-          value="submit"
+          value="Submit"
         />
       </form>
     );
@@ -188,9 +193,12 @@ class SearchFormList extends React.Component {
     });
 
     return (
-      <ul>
-        {renderedResults}
-      </ul>
+      <div>
+        <h2 id="resultsHeader">Results</h2>
+        <ul>
+          {renderedResults}
+        </ul>
+      </div>
     );
   }
 }
