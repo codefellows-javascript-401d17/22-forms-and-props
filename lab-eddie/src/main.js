@@ -96,7 +96,7 @@ class App extends React.Component {
   }
 
   redditQuery(channel, limit) {
-    if(limit <= 0 || !channel) {
+    if((limit <= 0 && limit > 101) || !channel) {
       return this.setState({queryError: true})
     }
     superagent.get(`https://www.reddit.com/r/${channel}.json?limit=${limit - 1}`)
