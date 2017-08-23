@@ -1,3 +1,3 @@
 # Reddit Search
 
-A Reddit search built using the React framework.
+A Reddit search built using React.
