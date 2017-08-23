@@ -11,14 +11,14 @@ class App extends React.Component {
     this.state = {
       topics: [],
     };
-    this.result = this.result.bind(this);
+    this.topics = this.topics.bind(this);
   }
 
   componentDidUpdate() {
     console.log('__STATE__', this.state);
   }
 
-  result(redditResults) {
+  topics(redditResults) {
     this.setState({
       topics: redditResults,
     });
@@ -27,7 +27,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Reddit Search Engine</h1>
-        <SearchForm result = {this.result} />
+        <SearchForm topics = {this.topics} />
         <SearchResultList topics = {this.state.topics} />
       </div>
     );
@@ -56,31 +56,31 @@ class SearchForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     superagent.get(`${API_URL}/${this.state.board}.json?limit=${this.state.limit}`)
-      .then((res) => {
-        let topics = res.body.data.children.reduce((processedPosts, post) => {
-       let newPost = {
-         title: post.data.title,
-         url: post.data.url,
-         ups: post.data.ups
-       }
+    .then((res) => {
+      let topics = res.body.data.children.reduce((processedPosts, post) => {
+        let newPost = {
+          title: post.data.title,
+          url: post.data.url,
+          ups: post.data.ups
+        }
 
-       processedPosts.push(newPost);
+        processedPosts.push(newPost);
 
-       return processedPosts
-     }, []);
-     try {
-       this.props.result(topics);
-     } catch (err) {
-       console.error(err);
-       this.setState({ failed: true })
-       console.log('1', this.state);
-     }
-   })
-      .catch((err) => {
-        this.setState({
-          failed: true,
-        });
+        return processedPosts
+      }, []);
+      try {
+        this.props.topics(topics);
+      } catch (err) {
+        console.error(err);
+        this.setState({ failed: true })
+        console.log('1', this.state);
+      }
+    })
+    .catch((err) => {
+      this.setState({
+        failed: true,
       });
+    });
   }
   render() {
     return (
@@ -92,7 +92,7 @@ class SearchForm extends React.Component {
           placeholder='Board Name'
           value={this.state.board}
           onChange={this.handleBoardNameChange}
-        />
+          />
         <input
           className={ this.state.failed ? 'error' : ''}
           type='number'
@@ -104,7 +104,7 @@ class SearchForm extends React.Component {
           onChange={this.handleLimitChange}
           min='0'
           max='100'
-        />
+          />
         <input type="submit" />
       </form>
     );
@@ -118,24 +118,24 @@ class SearchResultList extends React.Component {
   render() {
     return (
       <div>
-          <ul>
-            {this.props.topics.map((item, i) => {
-              return (
-                <li key = {i}>
-                  <a href = {item.url}>
-                    <h2>{item.title}</h2>
-                  </a>
-                  <span>
-                    <p>{item.ups}</p>
-                  </span>
-                </li>
-              );
-            }
-            )}
-          </ul>
-      </div>
-    );
-  }
+        <ul>
+          {this.props.topics.map((item, i) => {
+            return (
+              <li key = {i}>
+                <a href = {item.url}>
+                  <h2>{item.title}</h2>
+                </a>
+                <span>
+                  <p>{item.ups}</p>
+                </span>
+              </li>
+            );
+          }
+        )}
+      </ul>
+    </div>
+  );
+}
 }
 
 
