@@ -10,7 +10,18 @@ class RedditSearchResults extends React.Component {
     this.state = {};
   }
 
-
+  render() {
+    let articles = this.props.articles || [];
+    return (
+      <ul>
+        {articles.map((article, i) => {
+          return <li>
+            {article.data.author} <a href={article.data.url}>{article.data.title}</a>
+          </li>
+        })}
+      </ul>
+    )
+  }
 }
 
 class RedditSearchForm extends React.Component {
@@ -64,10 +75,12 @@ class App extends React.Component {
 
   fetchSubreddit(subreddit, limit) {
     superagent.get(`${API_URL}/${subreddit}.json?limit=${limit}`)
-    .then((rsp) => {
-      console.log(rsp);
-    })
-    .catch((err) => { console.error(err) })
+      .then((rsp) => {
+        this.setState({
+          articles: rsp.body.data.children
+        })
+      })
+      .catch((err) => { console.error(err) })
   }
 
   componentDidUpdate() {
@@ -78,8 +91,8 @@ class App extends React.Component {
     return (
       <div>
         <h1>Reddit Form</h1>
-        <RedditSearchForm fetchSubreddit={this.fetchSubreddit}/>
-        {/* <SearchResults /> */}
+        <RedditSearchForm fetchSubreddit={this.fetchSubreddit} />
+        <RedditSearchResults articles={this.state.articles} />
       </div>
     )
   }
