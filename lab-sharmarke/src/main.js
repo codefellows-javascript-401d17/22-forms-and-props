@@ -45,6 +45,10 @@ class SearchForm extends React.Component {
           value={this.state.limit}
           onChange={this.handleLimitChange}
           />
+          <input
+          type='submit'
+          value='submit'
+          />
         </form>
     )
   }
@@ -87,8 +91,8 @@ class App extends React.Component {
     this.searchReddit = this.searchReddit.bind(this);
   }
 
-  searchReddit(name, limit){
-    superagent.get(`${API_URL}/${name}.json?limit=${limit}`)
+  searchReddit(board, limit){
+    superagent.get(`${API_URL}/${board}.json?limit=${limit}`)
     .then(res => {
       this.setState({
         topics: res.body.data.children
