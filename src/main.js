@@ -18,13 +18,13 @@ class App extends React.Component {
     console.log('__STATE__', this.state);
   }
 
-  topics(redditResults) {
+  topics(topics) {
     this.setState({
-      topics: redditResults,
+      topics: topics,
     });
   }
   render() {
-    return (
+    return (  
       <div>
         <h1>Reddit Search Engine</h1>
         <SearchForm topics = {this.topics} />
