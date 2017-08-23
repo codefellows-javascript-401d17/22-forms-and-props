@@ -1,15 +1,16 @@
 
 import React from 'react'
 import ReactDom from 'react-dom';
+import superagent from 'superagent';
 
 
 class SearchForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state({
+    this.state = {
       channel: '',
       limit: '',
-    })
+    };
     super(props);
 
     this.clickHandler = this.clickHandler.bind(this);
@@ -19,6 +20,7 @@ class SearchForm extends React.Component {
 
   clickHandler(e) {
     e.preventDefault();
+    console.log('XXXXXXX')
     return this.props.redditQuery(this.state.channel, this.state.limit);
   }
 
@@ -32,7 +34,7 @@ class SearchForm extends React.Component {
 
   render() {
     return(
-      <form onClick={this.clickHandler}>
+      <form onSubmit={this.clickHandler}>
         <input
           type='text'
           name='channel'
@@ -47,6 +49,7 @@ class SearchForm extends React.Component {
           value={this.state.limit}
           onChange={this.onLimitChange}
         />
+        <button type='submit'>'Click ME'</button>
       </form>
 
     )
@@ -60,7 +63,9 @@ class SearchResult extends React.Component {
 
   render() {
     return(
-      <div></div>
+      !this.props.result ?
+      <li></li>:
+      <li></li>
     )
   }
 }
@@ -68,11 +73,33 @@ class SearchResult extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      queryError: null,
+      currentQuery: ''
+    }
+    this.redditQuery = this.redditQuery.bind(this);
+  }
+
+  redditQuery(channel, limit) {
+    if(limit >= 0) {
+      return this.setState({queryError: true})
+    }
+    superagent.get(`https://www.reddit.com/r/${channel}.json?limit=${limit - 1}`)
+    .then(res => {
+      this.setState({
+        queryError: null,
+        currentQuery: res.body
+      })
+
+
+    }).catch(err => {
+      this.setState({queryError: err});
+    })
   }
 
   render() {
     return(
-      <div></div>
+      <SearchForm redditQuery={this.redditQuery}/>
     )
   }
 }
