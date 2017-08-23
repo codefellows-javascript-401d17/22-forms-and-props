@@ -1,3 +1,4 @@
+import './style/main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import superagent from 'superagent';
@@ -13,11 +14,31 @@ class App extends React.Component {
       topics: [],
       failed: false
     }
+  }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+
+  render() {
+    return (
+      <div>
+        <SearchResultsList />
+      </div>
+    );
+  }
+}
+
+class SearchForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      board: '',
+      limit: '',
+      topics: [],
+      failed: false
+    }
+
     this.handleBoardChange = this.handleBoardChange.bind(this);
     this.handleLimitChange = this.handleLimitChange.bind(this);
-
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleBoardChange(e) {
@@ -51,32 +72,31 @@ class App extends React.Component {
             placeholder='number'
             value={this.state.limit}
             onChange={this.handleLimitChange}
-            min="1"
+            min='0'
             max="100"
             />
-          <input type="submit" value="submit"/>
+          <input
+            type="submit"
+            value="submit"
+            />
         </form>
       </div>
     );
   }
 }
 
-class SearchForm extends React.Component {
+class SearchResultsList extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {
-      board: '',
-      limit: '',
-      posts: []
-    }
 
     this.handleSearch = this.handleSearch.bind(this);
   }
 
   handleSearch(searchFormBoard, searchFormLimit) {
-    superagent.get(`${API_URL}/${searchFormBoard}.json?limit=${searchFormLimit-1}`)
+    console.log(searchFormLimit);
+    superagent.get(`${API_URL}/${searchFormBoard}.json?limit=${searchFormLimit}`)
     .then( res => {
-      let posts = res.body.data.children.reduce((processedPosts, post) => {
+      let topics = res.body.data.children.reduce((processedPosts, post) => {
         let newPost = {
           title: post.data.title,
           url: post.data.url,
@@ -88,19 +108,21 @@ class SearchForm extends React.Component {
         return processedPosts
       }, []);
       try {
-        console.log('hello');
         this.setState({
-          posts,
+          topics,
           failed: false
-        })
-        console.log(posts);
+        });
+        console.log(topics);
       } catch (err) {
         console.error(err);
+        this.setState({ failed: true })
+        console.log('1', this.state);
       }
     })
     .catch(err => {
       console.error(err);
       this.setState({ failed: true })
+      console.log('2', this.state);
     });
   }
 
@@ -108,7 +130,7 @@ class SearchForm extends React.Component {
     return (
       <div>
         <h1>Reddit Search Engine</h1>
-        <App handleSearch={this.handleSearch} />
+        <SearchForm handleSearch={this.handleSearch} />
       </div>
     );
   }
@@ -116,4 +138,4 @@ class SearchForm extends React.Component {
 
 
 
-ReactDOM.render(<SearchForm />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
