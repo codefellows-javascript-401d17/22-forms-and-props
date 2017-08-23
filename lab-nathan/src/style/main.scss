@@ -1,0 +1,42 @@
+* {
+  font-family: helvetica, sans-serif;
+}
+
+body {
+  margin: 20px;
+}
+
+input {
+  display: block;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+}
+
+input[type=submit] {
+  text-align: center;
+}
+
+input:valid {
+  border-color: inherit;
+}
+
+input:invalid {
+  box-shadow: 0 0 5px 1px red;
+}
+
+input:focus:invalid {
+  outline: none;
+}
+
+li {
+  list-style: none;
+  list-style-position: outside;
+}
+
+a {
+  text-decoration: none;
+}
