@@ -7,7 +7,7 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: `${__dirname}/src/main.js`,
   output: {
-    path: `${__dirname}/bundle`,
+    path: `${__dirname}/build`,
     publicPath: '/',
     filename: 'bundle-[hash].js'
   },

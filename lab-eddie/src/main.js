@@ -2,6 +2,7 @@
 import React from 'react'
 import ReactDom from 'react-dom';
 import superagent from 'superagent';
+require('./style/main.scss');
 
 
 class SearchForm extends React.Component {
@@ -20,7 +21,7 @@ class SearchForm extends React.Component {
 
   clickHandler(e) {
     e.preventDefault();
-    console.log('XXXXXXX')
+    console.log(this.props.error)
     return this.props.redditQuery(this.state.channel, this.state.limit);
   }
 
@@ -34,7 +35,7 @@ class SearchForm extends React.Component {
 
   render() {
     return(
-      <form onSubmit={this.clickHandler}>
+      <form onSubmit={this.clickHandler} className={this.props.error ? 'error' : ''}>
         <input
           type='text'
           name='channel'
@@ -62,10 +63,25 @@ class SearchResult extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return(
-      !this.props.result ?
-      <li></li>:
-      <li></li>
+      <ul>
+        {!this.props.error ?
+        (this.props.result ?
+        this.props.result.map((listing, ind) => {
+          return (
+          <li key={ind}>
+            <a href={listing.data.url}>
+              <h2>
+                {listing.data.title}
+              </h2>
+            </a>
+          </li>
+          )
+        }):
+        <li></li>):
+        <li>'Bad Request'</li>}
+      </ul>
     )
   }
 }
@@ -81,14 +97,14 @@ class App extends React.Component {
   }
 
   redditQuery(channel, limit) {
-    if(limit >= 0) {
+    if(limit <= 0 || !channel) {
       return this.setState({queryError: true})
     }
     superagent.get(`https://www.reddit.com/r/${channel}.json?limit=${limit - 1}`)
     .then(res => {
       this.setState({
         queryError: null,
-        currentQuery: res.body
+        currentQuery: res.body.data.children
       })
 
 
@@ -99,7 +115,10 @@ class App extends React.Component {
 
   render() {
     return(
-      <SearchForm redditQuery={this.redditQuery}/>
+      <div>
+        <SearchForm redditQuery={this.redditQuery} error={this.state.queryError}/>
+        <SearchResult result={this.state.currentQuery} error={this.state.queryError} />
+      </div>
     )
   }
 }
