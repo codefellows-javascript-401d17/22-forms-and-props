@@ -72,9 +72,8 @@ class SearchResult extends React.Component {
           return (
           <li key={ind}>
             <a href={listing.data.url}>
-              <h2>
-                {listing.data.title}
-              </h2>
+              <h2>{listing.data.title}</h2>
+              <span>{`Number of upvotes: ${listing.data.ups}`}</span>
             </a>
           </li>
           )
