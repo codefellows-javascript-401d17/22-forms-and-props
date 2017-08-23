@@ -8,10 +8,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      board = '',
-      limit = '',
-      topics = [],
-      failed = false;
+      board: '',
+      limit: '',
+      topics: [],
+      failed: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,6 +31,33 @@ class App extends React.Component {
   handleSubmit(e) {
     console.log('hi');
     e.preventDefault();
+    this.props.handleSearch(this.state.board, this.state.limit)
+  }
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit} >
+          <input
+            type='text'
+            name='boardName'
+            placeholder='Reddit Board Name'
+            value={this.state.board}
+            onChange={this.handleBoardChange}
+            />
+          <input
+            type='number'
+            name='boardLimit'
+            placeholder='number'
+            value={this.state.limit}
+            onChange={this.handleLimitChange}
+            min="1"
+            max="100"
+            />
+          <input type="submit" value="submit"/>
+        </form>
+      </div>
+    );
   }
 }
 
@@ -43,8 +70,11 @@ class SearchForm extends React.Component {
       posts: []
     }
 
+    this.handleSearch = this.handleSearch.bind(this);
+  }
+
   handleSearch(searchFormBoard, searchFormLimit) {
-    superagent.get(`${API_URL}/${searchFormBoard}.json?limit=${this.state.limit}`)
+    superagent.get(`${API_URL}/${searchFormBoard}.json?limit=${searchFormLimit-1}`)
     .then( res => {
       let posts = res.body.data.children.reduce((processedPosts, post) => {
         let newPost = {
@@ -59,40 +89,30 @@ class SearchForm extends React.Component {
       }, []);
       try {
         console.log('hello');
-        this.setState({ posts })
+        this.setState({
+          posts,
+          failed: false
+        })
         console.log(posts);
       } catch (err) {
         console.error(err);
       }
     })
-    .catch(console.error);
+    .catch(err => {
+      console.error(err);
+      this.setState({ failed: true })
+    });
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} >
-        <input
-          type='text'
-          name='boardName'
-          placeholder='Reddit Board Name'
-          value={this.state.board}
-          onChange={this.handleBoardChange}
-        />
-        <input
-          type='number'
-          name='boardLimit'
-          placeholder='number'
-          value={this.state.limit}
-          onChange={this.handleLimitChange}
-          min="1"
-          max="100"
-        />
-      <input type="submit" value="submit"/>
-      </form>
+      <div>
+        <h1>Reddit Search Engine</h1>
+        <App handleSearch={this.handleSearch} />
+      </div>
     );
   }
 }
-
 
 
 
